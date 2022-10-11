@@ -78,8 +78,7 @@ zpool create -o ashift=12 -O compression=on "${ZFS_POOL}" "${DISK_PART_ROOT}"
 zfs set compression=on "${ZFS_POOL}"
 
 log_info "Creating ZFS datasets"
-zfs create \
-    -p -o mountpoint=legacy -o xattr=sa -o acltype=posixacl "${ZFS_DS_ROOT}"
+zfs create -p -o mountpoint=legacy -o xattr=sa -o acltype=posixacl "${ZFS_DS_ROOT}"
 zfs snapshot "${ZFS_DS_ROOT_BLANK_SNAPSHOT}"
 zfs create -p -o mountpoint=legacy -o atime=off "${ZFS_DS_NIX}"
 zfs create -p \
@@ -161,20 +160,13 @@ cat <<EOF > /mnt/state/etc/nixos/configuration.nix
     ];
 
   services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
 
   services.zfs = {
     autoScrub.enable = true;
     autoSnapshot.enable = true;
   };
-
-  environment.gnome.excludePackages = [
-    pkgs.gnome.cheese pkgs.gnome-photos pkgs.gnome.gnome-music pkgs.gnome.gedit
-    pkgs.epiphany pkgs.gnome.gnome-characters pkgs.gnome.totem pkgs.gnome.tali
-    pkgs.gnome.iagno pkgs.gnome.hitori pkgs.gnome.atomix pkgs.gnome-tour
-    pkgs.gnome.geary
-  ];
 
   users = {
     mutableUsers = false;
@@ -196,13 +188,7 @@ cat <<EOF > /mnt/state/etc/nixos/configuration.nix
     };
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.11"; # Did you read the comment?
+  system.stateVersion = "22.05"; # Did you read the comment?
 
 }
 EOF
