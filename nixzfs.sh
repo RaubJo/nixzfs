@@ -78,20 +78,14 @@ zpool create -o ashift=12 -O compression=on "${ZFS_POOL}" "${DISK_PART_ROOT}"
 zfs set compression=on "${ZFS_POOL}"
 
 log_info "Creating ZFS datasets"
-zfs create -p -o mountpoint=legacy -o xattr=sa -o acltype=posixacl "${ZFS_DS_ROOT}"
+zfs create -p -f -o mountpoint=legacy -o xattr=sa -o acltype=posixacl "${ZFS_DS_ROOT}"
 zfs snapshot "${ZFS_DS_ROOT_BLANK_SNAPSHOT}"
 zfs create -p -o mountpoint=legacy -o atime=off "${ZFS_DS_NIX}"
 zfs create -p \
     -o mountpoint=legacy \
-    -o com.sun:auto-snapshot=true \
-    -o encryption=aes-256-gcm \
-    -o keyformat=passphrase \
     "${ZFS_DS_HOME}"
 zfs create -p \
     -o mountpoint=legacy \
-    -o com.sun:auto-snapshot=true \
-    -o encryption=aes-256-gcm \
-    -o keyformat=passphrase \
     "${ZFS_DS_STATE}"
 
 log_info "Mounting everything under /mnt"
